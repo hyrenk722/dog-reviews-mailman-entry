@@ -16,19 +16,26 @@ ENTRY = (
 )
 
 
-def check_gate(text):
-    """Return True when the text passes the competition gate."""
+def validate(text):
+    """Run every gate check on the text; True only when all pass."""
     if not isinstance(text, str):
         return False
     if text.strip() == "":
         return False
-    if not 1 <= len(text) <= 200:
+    if len(text) < 1 or len(text) > 200:
+        return False
+    if "\n" in text or "\r" in text:
         return False
     try:
         text.encode("utf-8")
     except UnicodeEncodeError:
         return False
     return True
+
+
+def check_gate(text):
+    """Gate entry point: delegate to the full validation routine."""
+    return validate(text)
 
 
 def main():
